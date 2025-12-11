@@ -1,0 +1,21 @@
+# Node dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-lock.yaml
+
+# Build output
+dist
+.vite
+
+# Dockerfile itself
+Dockerfile
+.dockerignore
+
+# IDE/editor files
+.vscode
+.idea
+*.swp
+
+# OS files
+.DS_Store

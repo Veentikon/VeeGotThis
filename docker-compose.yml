@@ -1,11 +1,14 @@
-version: "3.9"
 services:
   backend:
     build: ./backend
     ports: 
       - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
     volumes:
-      - ./backend:/app
+      - ./backend/app:/app/app
     environment:
       - ENV=dev
   
@@ -14,4 +17,24 @@ services:
     ports:
       - "5173:5173"
     volumes:
-      - ./frontend:/app
+      - ./frontend/VeeGotThis:/app
+      - /app/node_modules
+    environment:
+    - CHOKIDAR_USEPOLLING=true
+
+    # volumes:
+    #   - ./frontend:/app        # Your source code
+    #   - /app/node_modules      # Prevent overwrite of container node_modules
+  
+  db:
+    image: postgres:16.9
+    container_name: fam_db
+    restart: always
+    env_file:
+      - .env.db
+    volumes:
+      - type: bind
+        source: /postgress_data
+        target: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"

@@ -1,0 +1,20 @@
+# Python dependencies
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+venv/
+env/
+.env
+
+# Dockerfile and .dockerignore itself
+Dockerfile
+.dockerignore
+
+# Logs and IDE files
+*.log
+.vscode
+.idea
+
+# OS files
+.DS_Store
