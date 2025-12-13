@@ -1,26 +1,20 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
-// import './App.css'
+import './App.css'
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from './pages/RegisterPage';
 
-import './pages/AuthPage.tsx'
-// import AuthPage from './pages/AuthPage.tsx'
 
 function App() {
-
   return (
-    <>
-      <div>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="login">
-        {/* <AuthPage/> */}
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-    </>
-  )
+    <div className="card">
+      {/* <h1>Welcome to My App</h1> */}
+      {/* <LoginPage /> */}
+      <RegisterPage />
+    </div>
+  );
 }
 
 // function App() {
