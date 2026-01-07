@@ -9,7 +9,7 @@ import { AuthProvider } from "./context/AuthContext";
 import AuthLayout from "./auth/AuthLayout";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
-import RecoverPassword from "./auth/Recover";
+import Recover from "./auth/Recover";
 
 // Protected routes
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -18,6 +18,8 @@ import Home from "./pages/Home";
 import Events from "./pages/Events";
 import Todos from "./pages/Todos";
 import Dashboard from "./pages/Dashboard";
+import EnterCode from "./auth/EnterCode";
+import ResetPassword from "./auth/ResetPassword";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -29,7 +31,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/auth" element={<AuthLayout />}>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
-            <Route path="recover" element={<RecoverPassword />} />
+            <Route path="recover" element={<Recover />} />
+            <Route path="recover/code" element={<EnterCode />} />
+            <Route path="/auth/recover/code/reset-password" element={<ResetPassword />} />
           </Route>
 
           {/* Protected App Routes */}

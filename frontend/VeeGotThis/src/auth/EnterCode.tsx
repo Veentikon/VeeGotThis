@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
-function Recover() {
+function EnterCode() {
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
 
-    const handleRecover = () => {
+    const handleSendCode = () => {
         console.log("recovery code sent");
-        navigate("code", { replace: true });
-        // navigate("/", { replace: true });
     };
+    const handleEnterCode = () => {
+        console.log("code entered");
+        navigate("reset-password", { replace: true });
+    }
 
     return (
         <form className='authForm'>
@@ -18,13 +20,14 @@ function Recover() {
                 className="credInput"
                 id='inper'
                 type='text'
-                placeholder='email'
+                placeholder='Code'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
             />
-            <button onClick={handleRecover}>Send code</button>
+            <button onClick={handleEnterCode}>Submit</button>
+            <button onClick={handleSendCode}>Send code again</button>
         </form>
     );
 }
 
-export default Recover;
+export default EnterCode;

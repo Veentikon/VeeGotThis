@@ -1,11 +1,14 @@
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 function ResetPassword() {
     const [newPassword, setNewPassword] = useState('');
     const [confPassword, setConfPassword] = useState('');
+    const navigate = useNavigate();
 
-    const handleLogin = () => {
+    const handleSubmit = () => {
         console.log('Resetting password');
+        navigate("/auth/login", { replace: true });
     };
 
     return (
@@ -27,7 +30,7 @@ function ResetPassword() {
                 value={confPassword}
                 onChange={(e) => setConfPassword(e.target.value)}
             />
-            <button onClick={handleLogin}>Login</button>
+            <button onClick={handleSubmit}>Submit</button>
         </form>
     );
 } 
