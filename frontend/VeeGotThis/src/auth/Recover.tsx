@@ -11,7 +11,8 @@ function Recover() {
         <form className='authForm'>
             <h2>Recover Password</h2>
             <input 
-                id='lfi1'
+                className="credInput"
+                id='inper'
                 type='text'
                 placeholder='email'
                 value={email}

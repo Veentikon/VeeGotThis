@@ -1,36 +1,23 @@
-// import { StrictMode } from 'react'
-// import { createRoot } from 'react-dom/client'
-// import './index.css'
-// // import App from './App.tsx'
-// // import AuthPage from './pages/AuthPage.tsx'
-// import App from './App.tsx'
-// import { createBrowserRouter, RouterProvider } from "react-router-dom"
-
-// const router = createBrowserRouter([
-//   {path: '/', element: <App />}
-// ]);
-
-// createRoot(document.getElementById('root')!).render(
-//   <StrictMode>
-//     <App />
-//   </StrictMode>,
-// )
-
 // main.tsx
+// Functional Imports
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 
+// Authentication routes
 import AuthLayout from "./auth/AuthLayout";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import RecoverPassword from "./auth/Recover";
 
+// Protected routes
 import ProtectedRoute from "./routes/ProtectedRoute";
-// import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
+import Events from "./pages/Events";
+import Todos from "./pages/Todos";
+import Dashboard from "./pages/Dashboard";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -47,10 +34,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
           {/* Protected App Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route index element={<Home />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/" element={<Home />}>
+              <Route path="/todos" element={<Todos />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/profile" element={<Profile />} />
+            </Route>
           </Route>
-
         </Routes>
       </AuthProvider>
     </BrowserRouter>

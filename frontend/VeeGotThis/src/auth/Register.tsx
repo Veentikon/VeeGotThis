@@ -13,21 +13,24 @@ function Register() {
         <form className='authForm'>
             <h2>Register</h2>
             <input
-                id='lfi1'
+                className="credInput"
+                id='inpureg'
                 type="text"
                 placeholder="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
             />
             <input
-                id='lfi1'
+                className="credInput"
+                id='inppreg'
                 type="password"
                 placeholder="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
             <input
-                id='lfi1'
+                className="credInput"
+                id='inppcreg'
                 type="password"
                 placeholder="confirm password"
                 value={password1}

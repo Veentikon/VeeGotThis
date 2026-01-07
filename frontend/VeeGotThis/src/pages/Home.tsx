@@ -1,9 +1,14 @@
-import "../index.css"
+// Home.jsx
+import { Outlet } from "react-router-dom";
+import MyAppBar from "../components/TopAppBar";
 
 export default function Home() {
   return (
-    <div>
-      <h1>Home</h1>
-    </div>
+    <>
+      <MyAppBar />
+      <main style={{ padding: 16, marginTop: 64 }}>
+        <Outlet />
+      </main>
+    </>
   );
 }

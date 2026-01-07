@@ -5,3 +5,8 @@ export default function Profile() {
     </div>
   );
 }
+
+// Display user infomration and allow to update it
+// mainly just username, password, and email
+// Additionally, date account was created
+// Tasks completed

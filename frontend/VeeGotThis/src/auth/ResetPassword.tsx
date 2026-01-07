@@ -12,14 +12,16 @@ function ResetPassword() {
         <form className='authForm'>
             <h2>Set New Password</h2>
             <input
-                id='lfi1'
+                className="credInput"
+                id='inppres'
                 type="password"
                 placeholder="New password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
             />
             <input
-                id='lfi1'
+                className="credInput"
+                id='inppcres'
                 type="password"
                 placeholder="Confirm Password"
                 value={confPassword}

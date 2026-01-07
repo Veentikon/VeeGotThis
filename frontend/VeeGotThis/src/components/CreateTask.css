@@ -1,0 +1,22 @@
+.createTaskContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: darkslategray;
+    padding: 8px;
+    position: fixed;
+    bottom: 20px;
+    width: 90%;
+    /* left: 50%; */
+    left: 5%;
+    box-sizing: border-box;
+}
+.createTaskButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+#taskInput {
+    padding: 10px;
+    font-size: 1em;
+}

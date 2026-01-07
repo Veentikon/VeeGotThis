@@ -1,10 +1,9 @@
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from './pages/RegisterPage';
+// import LoginPage from "./auth/Login";
+import RegisterPage from './auth/Register';
 
 
 function App() {

@@ -19,14 +19,16 @@ function Login() {
         <form className='authForm' onSubmit={handleLogin}>
             <h2>Login</h2>
             <input
-                id='lfi1'
+                className="credInput"
+                id='inpul'
                 type="text"
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
             />
             <input
-                id='lfi1'
+                className="credInput"
+                id='inppl'
                 type="password"
                 placeholder="Password"
                 value={password}
