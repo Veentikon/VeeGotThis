@@ -11,7 +11,7 @@ export default function Todos() {
 
   const handleCreate = (taskDescription: string) => {
     console.log("Creating task:", taskDescription);
-    setIsEditing(false);
+    // setIsEditing(false);
   }
 
   return (

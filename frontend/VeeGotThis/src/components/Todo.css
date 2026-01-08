@@ -29,16 +29,51 @@
     z-index: 10;
 
     display: flex;
-    justify-content: center; /* centers when content fits */
+    justify-content: center;
+
+    height: fit-content; /* 🔑 THIS FIXES THE FADE HEIGHT */
 }
 
 .taskSetList {
     display: flex;
     gap: 8px;
-
     padding: 8px 12px;
-    list-style: none;
 
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    background-color: darkslategray;
+
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 12px;
+
+    scrollbar-width: none;
+
+    /* 🔑 THE FADE */
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 32px,
+        black calc(100% - 32px),
+        transparent
+    );
+    mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 32px,
+        black calc(100% - 32px),
+        transparent
+    );
+}
+
+/* .taskSetList {
+    position: relative;
+
+    display: flex;
+    gap: 8px;
+    padding: 8px 12px;
+
+    list-style: none;
     overflow-x: auto;
     overflow-y: hidden;
 
@@ -47,15 +82,15 @@
 
     background-color: darkslategray;
 
-    /* IMPORTANT */
     justify-content: flex-start;
 
     scroll-snap-type: x mandatory;
     scroll-padding-inline: 12px;
+    scroll-behavior: smooth;
 
     -ms-overflow-style: none;
     scrollbar-width: none;
-}
+} */
 
 .taskSetList::-webkit-scrollbar {
     display: none;

@@ -70,7 +70,7 @@ export default function TodoList() {
         },
         {
             id: "set-5",
-            name: "Personal",
+            name: "Personallen",
             ownerId: "user-123",
             sharedWith: [],
             tasks: [
@@ -95,30 +95,6 @@ export default function TodoList() {
             ]
         }
     ];
-    // const data: TaskSet[] = [
-    //   {
-    //     id: "set-1",
-    //     name: "Misc",
-    //     tasks: [
-    //       { id: "task-1", text: "Buy groceries", completed: false },
-    //       { id: "task-2", text: "Buy NAS compatible case", completed: false }
-    //     ]
-    //   },
-    //   {
-    //     id: "set-2",
-    //     name: "Personal",
-    //     tasks: [
-    //       { id: "task-3", text: "Finish assignment", completed: true }
-    //     ]
-    //   },
-    //   {
-    //     id: "set-3",
-    //     name: "Work",
-    //     tasks: [
-    //       { id: "task-4", text: "Do some stuff", completed: true }
-    //     ]
-    //   }
-    // ];
 
     setTaskSets(data);
     setSelectedSetId(data[0].id); // default selection
