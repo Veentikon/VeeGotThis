@@ -1,27 +1,36 @@
-.todocard {
-    width: 400px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background-color:teal;
-    padding: 5px;
-}
-
 .todolist {
     gap: 9px;
     display: flex;
     flex-direction: column;
-    min-width: fit-content;
+    width: 100%;
+
+    /* align-items: center; */
+    /* align-items: stretch; */
+    /* margin-inline: auto; */
 
     list-style: none;
     padding: 0;
     margin: 0;
-
-    max-width: 600px;
-    margin-inline: auto;
 }
 
-.taskSetWrapper {
+.todocard {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background-color: teal;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+
+.todocard span {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+/* .taskSetWrapper {
     position: fixed;
     top: 50px;
     left: 2%;
@@ -30,11 +39,19 @@
 
     display: flex;
     justify-content: center;
+} */
 
-    height: fit-content; /* 🔑 THIS FIXES THE FADE HEIGHT */
+.taskSetWrapper {
+  position: sticky;
+  top: 50px; /* height of MyAppBar */
+  z-index: 10;
+
+  display: flex;
+  justify-content: center;
 }
 
 .taskSetList {
+    width: 100%;
     display: flex;
     gap: 8px;
     padding: 8px 12px;
@@ -66,32 +83,6 @@
     );
 }
 
-/* .taskSetList {
-    position: relative;
-
-    display: flex;
-    gap: 8px;
-    padding: 8px 12px;
-
-    list-style: none;
-    overflow-x: auto;
-    overflow-y: hidden;
-
-    box-sizing: border-box;
-    max-width: 100%;
-
-    background-color: darkslategray;
-
-    justify-content: flex-start;
-
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 12px;
-    scroll-behavior: smooth;
-
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-} */
-
 .taskSetList::-webkit-scrollbar {
     display: none;
 }
@@ -121,3 +112,4 @@
   background: #333;
   color: white;
 }
+

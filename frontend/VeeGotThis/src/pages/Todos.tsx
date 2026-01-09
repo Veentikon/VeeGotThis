@@ -5,6 +5,7 @@ import { useState } from "react";
 import CreateTask from "../components/CreateTask";
 // import { Create } from "@mui/icons-material";
 // import { teal } from "@mui/material/colors";
+// import '../index.css'
 
 export default function Todos() {
   const [isEditing, setIsEditing] = useState(false);
@@ -15,9 +16,9 @@ export default function Todos() {
   }
 
   return (
-    <div>
+    <>
       <TodoList />
-      {isEditing ? (
+       {isEditing ? (
         <CreateTask
           onCreate={handleCreate}
           onCancel={() => setIsEditing(false)}
@@ -39,6 +40,6 @@ export default function Todos() {
         <AddCircle sx={{ fontSize: 50 }} />
         </IconButton>
       )}
-    </div> 
+    </> 
   );
 }

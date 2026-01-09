@@ -26,7 +26,7 @@ export default function CreateTask({ onCreate, onCancel }: CreateTaskProps) {
             />
             <div className='createTaskButtons'>
                 <button type="button" onClick={handleCreate}>Create</button>
-                <button type="button" onClick={onCancel}>Cancel</button>
+                <button type="button" onClick={onCancel}>Close</button>
             </div>
         </div>
     )

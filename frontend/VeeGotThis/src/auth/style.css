@@ -67,12 +67,9 @@ button:focus-visible {
   }
 }
 
-
-
-
 .authForm {
     margin: 2 auto;
-    /* border: 2px solid; */
+    /* border: 2px solid;
     /* border-radius: 10%; */
     padding: 2rem;
     text-align: center;
@@ -83,15 +80,20 @@ button:focus-visible {
 
 .credInput {
     padding: 10px;
-    /* margin-bottom: 10px; */
+    margin-bottom: 10px;
     margin-bottom: 10px;
 }
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* #root {
+  min-height: 100vh;
+  min-width: 50vh;
+} */
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 .card {

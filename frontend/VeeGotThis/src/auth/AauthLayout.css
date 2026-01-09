@@ -1,0 +1,9 @@
+.authPage {
+  /* min-height: 100vh; */
+  position: center;
+  display: grid;           /* easiest way to center */
+  place-items: center;     /* centers children both vertically & horizontally */
+  padding: 16px;           /* breathing room on mobile */
+  box-sizing: border-box;
+  width: 100%;
+}

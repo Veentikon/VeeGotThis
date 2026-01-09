@@ -1,10 +1,11 @@
 // auth/AuthLayout.tsx
 import { Outlet, Link } from "react-router-dom";
 import "./style.css"
+import "./AauthLayout.css"
 
 export default function AuthLayout() {
   return (
-    <div>
+    <div className="authPage">
       <h1>Auth</h1>
 
       <nav>
