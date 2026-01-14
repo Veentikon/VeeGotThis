@@ -3,14 +3,14 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 720px;
+    padding: 16px;
+    box-sizing: border-box;
+}
 
-    /* align-items: center; */
-    /* align-items: stretch; */
-    /* margin-inline: auto; */
-
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.CheckBox {
+    width: 20px;
+    height: 20px;
 }
 
 .todocard {
@@ -30,31 +30,43 @@
   word-break: break-word;
 }
 
-/* .taskSetWrapper {
-    position: fixed;
-    top: 50px;
-    left: 2%;
-    right: 2%;
-    z-index: 10;
-
-    display: flex;
-    justify-content: center;
-} */
-
-.taskSetWrapper {
-  position: sticky;
-  top: 50px; /* height of MyAppBar */
-  z-index: 10;
+.tasksScrollArea {
+  position: fixed;
+  top: calc(50px + 56px);
+  bottom: calc(56px + 16px);
+  /* top: calc(var(--header-offset) + var(--task-set-height));
+  bottom: var(--console-height); */
+  left: 0;
+  right: 0;
 
   display: flex;
   justify-content: center;
+
+  overflow-y: auto;
+
+  /* iOS momentum scrolling enabled */
+  -webkit-overflow-scrolling: touch;
+}
+
+.taskSetWrapper {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    padding: 8px 0;
 }
 
 .taskSetList {
+    justify-content: center;
     width: 100%;
     display: flex;
     gap: 8px;
     padding: 8px 12px;
+
+    align-items: center;
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -89,7 +101,6 @@
 
 .taskSet {
     flex: 0 0 auto;
-
     background-color: teal;
     border-radius: 8px;
     padding: 6px 12px;
@@ -113,3 +124,29 @@
   color: white;
 }
 
+
+.taskManagementContainer {
+    width: 100%;
+    max-width: 720px;
+    margin-inline: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+    background: teal;
+    border-radius: 8px;
+    pointer-events: auto;
+
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.taskManagementWrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    pointer-events: none; /* optional */
+    padding: 8px 0;
+}

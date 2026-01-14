@@ -3,12 +3,13 @@ import AddCircle from "@mui/icons-material/AddCircle"
 import TodoList from "../components/TodoList";
 import { useState } from "react";
 import CreateTask from "../components/CreateTask";
+// import TaskManagement from "../components/TaskManagement";
 // import { Create } from "@mui/icons-material";
 // import { teal } from "@mui/material/colors";
 // import '../index.css'
 
 export default function Todos() {
-  const [isEditing, setIsEditing] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
 
   const handleCreate = (taskDescription: string) => {
     console.log("Creating task:", taskDescription);
@@ -18,7 +19,8 @@ export default function Todos() {
   return (
     <>
       <TodoList />
-       {isEditing ? (
+      {/* <TaskManagement /> */}
+       {/* {isEditing ? (
         <CreateTask
           onCreate={handleCreate}
           onCancel={() => setIsEditing(false)}
@@ -39,7 +41,7 @@ export default function Todos() {
         >
         <AddCircle sx={{ fontSize: 50 }} />
         </IconButton>
-      )}
+      )} */}
     </> 
   );
 }

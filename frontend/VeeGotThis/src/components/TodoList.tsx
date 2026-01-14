@@ -1,4 +1,5 @@
 import "./Todo.css";
+// import "./TaskManagement.css"
 import { useEffect, useState } from "react";
 
 type Todo = {
@@ -39,7 +40,7 @@ export default function TodoList() {
                 id: "task-2",
                 text: "Buy NAS compatible case",
                 completed: false
-            }
+            },
         ]
         },
         {
@@ -137,25 +138,37 @@ export default function TodoList() {
       </div>
 
       {/* Tasks for selected set */}
-      <ul className="todolist">
-        {selectedSet?.tasks.map(task => (
-          <li key={task.id} className="todocard">
-            <input
-              type="checkbox"
-              checked={task.completed}
-              onChange={() => toggleTask(task.id)}
-            />
-            <span
-              style={{
-                textDecoration: task.completed ? "line-through" : "none",
-                opacity: task.completed ? 0.6 : 1
-              }}
-            >
-              {task.text}
-            </span>
-          </li>
-        ))}
-      </ul>
+      <div className="tasksScrollArea">
+        <ul className="todolist">
+          {selectedSet?.tasks.map(task => (
+            <li key={task.id} className="todocard">
+              <input
+                type="checkbox"
+                className="CheckBox"
+                checked={task.completed}
+                onChange={() => toggleTask(task.id)}
+              />
+              <span
+                style={{
+                  textDecoration: task.completed ? "line-through" : "none",
+                  opacity: task.completed ? 0.6 : 1
+                }}
+              >
+                {task.text}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="taskManagementWrapper">
+        <div className="taskManagementContainer">
+          <button type="button">+set</button>
+          <button type="button">+task</button>
+          <button type="button">-set</button>
+          <button type="button">-task</button>
+        </div>
+      </div>
     </>
   );
 }

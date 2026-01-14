@@ -10,6 +10,7 @@
     /* left: 50%; */
     left: 5%;
     box-sizing: border-box;
+    border-radius: 8px;
 }
 .createTaskButtons {
     display: flex;
