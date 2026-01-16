@@ -41,6 +41,56 @@ export default function TodoList() {
                 text: "Buy NAS compatible case",
                 completed: false
             },
+            {
+                id: "task-10",
+                text: "Buy groceries",
+                completed: false
+            },
+            {
+                id: "task-11",
+                text: "Buy NAS compatible case",
+                completed: false
+            },
+            {
+                id: "task-12",
+                text: "Buy groceries",
+                completed: false
+            },
+            {
+                id: "task-13",
+                text: "Buy NAS compatible case",
+                completed: false
+            },
+            {
+                id: "task-14",
+                text: "Buy groceries",
+                completed: false
+            },
+            {
+                id: "task-15",
+                text: "Buy NAS compatible case",
+                completed: false
+            },
+            {
+                id: "task-16",
+                text: "Buy groceries",
+                completed: false
+            },
+            {
+                id: "task-17",
+                text: "Buy NAS compatible case",
+                completed: false
+            },
+            {
+                id: "task-18",
+                text: "Buy groceries",
+                completed: false
+            },
+            {
+                id: "task-19",
+                text: "Buy NAS compatible case",
+                completed: false
+            },
         ]
         },
         {
@@ -120,10 +170,63 @@ export default function TodoList() {
     );
   };
 
+  // return (
+  //   <div className="tasksPage">
+  //     <header className="taskSetWrapper">
+  //       <div className="appColumn">
+  //         <ul className="taskSetList">
+  //           {taskSets.map(set => (
+  //             <li
+  //               key={set.id}
+  //               className={`taskSet ${set.id === selectedSetId ? "active" : ""}`}
+  //               onClick={() => setSelectedSetId(set.id)}
+  //             >
+  //               {set.name}
+  //             </li>
+  //           ))}
+  //         </ul>
+  //       </div>
+  //     </header>
+
+  //     <main className="tasksScrollArea">
+  //         <div className="appColumn">
+  //           <ul className="todolist">
+  //             {selectedSet?.tasks.map(task => (
+  //               <li key={task.id} className="todocard">
+  //                 <input
+  //                   type="checkbox"
+  //                   className="CheckBox"
+  //                   checked={task.completed}
+  //                   onChange={() => toggleTask(task.id)}
+  //                 />
+  //                 <span
+  //                   style={{
+  //                     textDecoration: task.completed ? "line-through" : "none",
+  //                     opacity: task.completed ? 0.6 : 1
+  //                   }}
+  //                 >
+  //                   {task.text}
+  //                 </span>
+  //               </li>
+  //             ))}
+  //           </ul>
+  //       </div>
+  //     </main>
+
+  //     <footer className="taskManagementWrapper">
+  //       <div className="appColumn taskManagementContainer">
+  //         <button type="button">+set</button>
+  //         <button type="button">+task</button>
+  //         <button type="button">-set</button>
+  //         <button type="button">-task</button>
+  //       </div>
+  //     </footer>
+  //   </div>
+  // );
   return (
-    <>
-      {/* Horizontal task set list */}
-      <div className="taskSetWrapper">
+    <div className="tasksPage">
+      {/* Sticky Task Sets Header */}
+      <header className="taskSetHeader">
         <ul className="taskSetList">
           {taskSets.map(set => (
             <li
@@ -135,10 +238,10 @@ export default function TodoList() {
             </li>
           ))}
         </ul>
-      </div>
+      </header>
 
-      {/* Tasks for selected set */}
-      <div className="tasksScrollArea">
+      {/* Scrollable task list */}
+      <main className="tasksScrollArea">
         <ul className="todolist">
           {selectedSet?.tasks.map(task => (
             <li key={task.id} className="todocard">
@@ -151,7 +254,7 @@ export default function TodoList() {
               <span
                 style={{
                   textDecoration: task.completed ? "line-through" : "none",
-                  opacity: task.completed ? 0.6 : 1
+                  opacity: task.completed ? 0.6 : 1,
                 }}
               >
                 {task.text}
@@ -159,16 +262,17 @@ export default function TodoList() {
             </li>
           ))}
         </ul>
-      </div>
+      </main>
 
-      <div className="taskManagementWrapper">
+      {/* Footer controls */}
+      <footer className="taskManagementWrapper">
         <div className="taskManagementContainer">
-          <button type="button">+set</button>
-          <button type="button">+task</button>
-          <button type="button">-set</button>
-          <button type="button">-task</button>
+          <button>+set</button>
+          <button>+task</button>
+          <button>-set</button>
+          <button>-task</button>
         </div>
-      </div>
-    </>
+      </footer>
+    </div>
   );
 }

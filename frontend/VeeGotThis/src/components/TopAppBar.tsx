@@ -27,7 +27,7 @@ export default function TopAppBar() {
 
   return (
     <>
-      <AppBar position="fixed">
+      <AppBar position="static" elevation={4}>
         <Toolbar>
           {isMobile && (
             <IconButton

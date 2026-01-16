@@ -1,85 +1,30 @@
-.todolist {
-    gap: 9px;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 720px;
-    padding: 16px;
-    box-sizing: border-box;
-}
+/* Page container: vertical layout */
+.tasksPage {
+  /* height: 100dvh; */
+  /* display: grid; */
 
-.CheckBox {
-    width: 20px;
-    height: 20px;
-}
-
-.todocard {
-  width: 100%;
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  background-color: teal;
-  box-sizing: border-box;
-  border-radius: 8px;
-}
-
-.todocard span {
   flex: 1;
-  min-width: 0;
-  word-break: break-word;
+  flex-direction: column;
+  min-height: 0;
+  grid-template-rows: auto 1fr auto;
+
+  font-family: sans-serif;
+  width: 100%;
 }
 
-.tasksScrollArea {
-  position: fixed;
-  top: calc(50px + 56px);
-  bottom: calc(56px + 16px);
-  /* top: calc(var(--header-offset) + var(--task-set-height));
-  bottom: var(--console-height); */
-  left: 0;
-  right: 0;
+/* Header sticks at top */
+.taskSetHeader {
+  flex-shrink: 0;
+  background: teal;
+  padding: 8px;
+  z-index: 10;
 
   display: flex;
   justify-content: center;
 
-  overflow-y: auto;
-
-  /* iOS momentum scrolling enabled */
-  -webkit-overflow-scrolling: touch;
-}
-
-.taskSetWrapper {
-    position: fixed;
-    top: 50px;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    pointer-events: none;
-    padding: 8px 0;
-}
-
-.taskSetList {
-    justify-content: center;
-    width: 100%;
-    display: flex;
-    gap: 8px;
-    padding: 8px 12px;
-
-    align-items: center;
-
-    overflow-x: auto;
-    overflow-y: hidden;
-
-    background-color: darkslategray;
-
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 12px;
-
-    scrollbar-width: none;
-
-    /* 🔑 THE FADE */
-    -webkit-mask-image: linear-gradient(
+  scroll-snap-type: x mandatory;
+  -webkit-mask-image: linear-gradient(
         to right,
         transparent,
         black 32px,
@@ -95,58 +40,112 @@
     );
 }
 
+.taskSetList {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px;
+  list-style: none;
+  margin: 0;
+}
+
 .taskSetList::-webkit-scrollbar {
-    display: none;
+  display: none; /* hide horizontal scrollbar */
 }
 
 .taskSet {
-    flex: 0 0 auto;
-    background-color: teal;
-    border-radius: 8px;
-    padding: 6px 12px;
-    height: 28px;
-
-    display: flex;
-    align-items: center;
-
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    scroll-snap-align: start;
-
-    cursor: pointer;
-    user-select: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: lightgray;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
 .taskSet.active {
-  background: #333;
+  background: darkslategray;
   color: white;
 }
 
+/* Scrollable area fills available space above footer */
+.tasksScrollArea {
+  flex: 1;
+  min-height: 0;   /* still essential */
+  overflow-y: auto;
 
-.taskManagementContainer {
-    width: 100%;
-    max-width: 720px;
-    margin-inline: 16px;
-    padding: 16px;
-    box-sizing: border-box;
-    background: teal;
-    border-radius: 8px;
-    pointer-events: auto;
+  display: flex;
+  justify-content: center;
+  padding: 16px;
 
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Task list */
+.todolist {
+  width: 100%;
+  max-width: 750px;
+
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* align-items: center; */
+}
+
+/* Individual task cards */
+.todocard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: darkslategray;
+  color: white;
+}
+
+.taskFooter {
+    flex-shrink: 0; /* prevent shrinking */
+    background-color: teal;
     display: flex;
     justify-content: center;
-    gap: 10px;
+    padding: 16px 0;
+    box-sizing: border-box;
+    max-width: 750px;
+}
+
+.CheckBox {
+  width: 20px;
+  height: 20px;
 }
 
 .taskManagementWrapper {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    pointer-events: none; /* optional */
-    padding: 8px 0;
+  flex-shrink: 0;
+  background-color: teal;
+  padding: 16px 0;
+
+  display: flex;
+  justify-content: center;
+}
+
+.taskManagementContainer {
+  display: flex;
+  gap: 8px;
+}
+
+.taskManagementContainer button {
+  background-color: white;
+  color: teal;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.taskManagementContainer button:hover {
+  background-color: lightgray;
+  transform: scale(1.05);
 }

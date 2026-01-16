@@ -1,0 +1,208 @@
+.tasksPage {
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: 
+        auto /* task set header */
+        1fr  /* scroll area */
+        auto; /* footer */
+    overflow: hidden;
+}
+
+.taskSetWrapper,
+.taskManagementWrapper {
+  flex: 0 0 auto;
+}
+
+.taskSetWrapper {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* .tasksScrollArea {
+  position: fixed;
+  top: calc(79px + 56px);
+  bottom: calc(70px + 16px);
+  left: 0;
+  right: 0;
+
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+
+  -webkit-overflow-scrolling: touch;
+} */
+
+.tasksScrollArea {
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+.todolist {
+    gap: 9px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.CheckBox {
+    width: 20px;
+    height: 20px;
+}
+
+.todocard {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  /* background-color: teal; */
+  background-color: darkslategray;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+
+.todocard span {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.tasksScrollArea {
+  position: fixed;
+  top: calc(79px + 56px);
+  bottom: calc(70px + 16px);
+
+  /* top: calc(var(--header-offset) + var(--task-set-height));
+  bottom: var(--console-height); */
+  left: 0;
+  right: 0;
+
+  /* display: flex;
+  justify-content: center; */
+
+  overflow-y: auto;
+
+  /* iOS momentum scrolling enabled */
+  -webkit-overflow-scrolling: touch;
+
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+/* 
+.taskSetWrapper {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    padding: 8px 0;
+} */
+
+.taskSetList {
+    justify-content: center;
+    width: 100%;
+    display: flex;
+    gap: 8px;
+    padding: 8px 12px;
+
+    align-items: center;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    /* background-color: darkslategray; */
+    background-color: teal;
+
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 12px;
+
+    scrollbar-width: none;
+
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 32px,
+        black calc(100% - 32px),
+        transparent
+    );
+    mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 32px,
+        black calc(100% - 32px),
+        transparent
+    );
+}
+
+.taskSetList::-webkit-scrollbar {
+    display: none;
+}
+
+.taskSet {
+    flex: 0 0 auto;
+    background-color: teal;
+    border-radius: 8px;
+    padding: 6px 12px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    scroll-snap-align: start;
+
+    cursor: pointer;
+    user-select: none;
+}
+
+.taskSet.active {
+  background: #333;
+  color: white;
+}
+
+
+.taskManagementContainer {
+    width: 100%;
+    max-width: 720px;
+    /* margin-inline: 16px; */
+    padding: 16px;
+    box-sizing: border-box;
+    background: teal;
+    /* border-radius: 8px; */
+    pointer-events: auto;
+
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* spacing between elements the component contains */
+}
+
+.taskManagementWrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    /* justify-content: center; */
+    pointer-events: none;
+    padding: 8px 0;
+}
+
+.appColumn {
+  width: 100%;
+  max-width: 720px;
+  margin-inline: auto;
+  padding-inline: 16px;
+  box-sizing: border-box;
+}
