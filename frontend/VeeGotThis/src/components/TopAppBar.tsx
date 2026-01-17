@@ -10,7 +10,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
-import { useTheme, useMediaQuery } from "@mui/material";
+import { useTheme, useMediaQuery, ToggleButton } from "@mui/material";
 
 const navItems = [
   { label: "Todos", path: "/todos" },
@@ -27,7 +27,7 @@ export default function TopAppBar() {
 
   return (
     <>
-      <AppBar position="static" elevation={4}>
+      {/* <AppBar position="static" elevation={4}>
         <Toolbar>
           {isMobile && (
             <IconButton
@@ -35,7 +35,7 @@ export default function TopAppBar() {
               edge="start"
               color="inherit"
               onClick={() => setOpen(true)}
-              sx={{ mr: 2 }}
+              sx={{ mr: 2, backgroundColor: "var(--primary-color)", color: "var(--bg-color)" }}
             >
               <MenuIcon />
             </IconButton>
@@ -53,7 +53,58 @@ export default function TopAppBar() {
               </Button>
             ))}
         </Toolbar>
+      </AppBar> */}
+      <AppBar
+        position="static"
+        elevation={4}
+        sx={{
+          backgroundColor: "var(--appbar-color)", // your CSS variable
+          color: "var(--text-color)"             // ensures text/icons are visible
+        }}
+      >
+        <Toolbar>
+          {isMobile && (
+            <IconButton
+              size="large"
+              edge="start"
+              onClick={() => setOpen(true)}
+              sx={{
+                mr: 2,
+                backgroundColor: "var(--primary-color)",
+                color: "var(--bg-color)",
+                "&:hover": {
+                  backgroundColor: "var(--primary-hover)"
+                }
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+
+          {!isMobile &&
+            navItems.map((item) => (
+              <Button
+                key={item.path}
+                component={Link}
+                to={item.path}
+                sx={{
+                  color: "var(--text-color)",
+                  "&:hover": { color: "var(--primary-color)" },
+                }}
+              >
+                {item.label}
+              </Button>
+            ))}
+        {/* <ToggleButton value="darkMode" 
+          sx={{ marginLeft: 'auto', color: 'var(--text-color)',
+             height: '40px', width: ' 40px',
+             backgroundColor: 'var(--primary-color)',
+          }} */}
+        
+        {/* /> */}
+        </Toolbar>
       </AppBar>
+
 
       <Drawer
         anchor="left"
@@ -76,6 +127,7 @@ export default function TopAppBar() {
           </List>
         </Box>
       </Drawer>
+      
     </>
   );
 }

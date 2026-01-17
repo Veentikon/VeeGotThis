@@ -1,4 +1,4 @@
-:root {
+/* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -11,31 +11,31 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
+} */
 
-a {
+/* a {
   font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
-}
-a:hover {
+} */
+/* a:hover {
   color: #535bf2;
-}
+} */
 
-body {
+/* body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
+} */
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
 
-button {
+/* button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -65,12 +65,10 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
 
 .authForm {
     margin: 2 auto;
-    /* border: 2px solid;
-    /* border-radius: 10%; */
     padding: 2rem;
     text-align: center;
     align-items: center;
@@ -83,11 +81,6 @@ button:focus-visible {
     margin-bottom: 10px;
     margin-bottom: 10px;
 }
-
-/* #root {
-  min-height: 100vh;
-  min-width: 50vh;
-} */
 
 html, body, #root {
   height: 100%;

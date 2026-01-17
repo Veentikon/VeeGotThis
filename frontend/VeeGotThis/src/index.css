@@ -1,11 +1,40 @@
+/* ============================= */
+/* Root Variables (Light Theme)  */
+/* ============================= */
 :root {
+    /* Backgrounds */
+  --bg-color: #f7f7f7;       /* Very light grey background */
+  --surface-color: #ffffff;  /* Slightly brighter for cards, panels */
+
+  /* Text */
+  --text-color: #202124;     /* Dark grey text, not pure black */
+  --text-muted: #5f6368;     /* Medium grey for secondary text / placeholders */
+
+  /* Primary / interactive */
+  --primary-color: #1a73e8;   /* Google blue for links, buttons, highlights */
+  --primary-hover: #1669c1;   /* Slightly darker blue for hover */
+
+  /* Accent / highlights */
+  --accent-color: #34a853;    /* Green accent for selected items or active states */
+
+  /* Borders / dividers */
+  --border-color: #dadce0;    /* Very soft grey for subtle dividers */
+
+  /* App bar & burger menu */
+  --appbar-color: #ffffff;    /* Slightly brighter than background */
+  --burger-icon-color: #202124; /* Same as text for visibility */
+  
+  /* Scrollbar */
+  --scrollbar-track: white;
+  --scrollbar-thumb: #374151;
+
+  /* Checkbox */
+  --checkbox-border: #4b5563;
+  --checkbox-bg: white;
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: #ffffffde;
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,27 +42,63 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* ============================= */
+/* Dark Theme (prefers-color-scheme) */
+/* ============================= */
+@media (prefers-color-scheme: dark) {
+  :root {
+  /* Backgrounds */
+  --bg-color: #0f1115;        /* ChatGPT page background */
+  --surface-color: #1a1c20;   /* Cards, panels, drawers */
+
+  /* Text */
+  --text-color: #e5e7eb;      /* Soft off-white */
+  --text-muted: #9ca3af;      /* Muted grey for secondary text */
+
+  /* Primary / interactive */
+  --primary-color: #3b82f6;   /* Soft ChatGPT-style blue */
+  --primary-hover: #2563eb;   /* Darker blue on hover */
+
+  /* Accent / highlights */
+  --accent-color: #22c55e;    /* Subtle green for success/active */
+
+  /* Borders / dividers */
+  --border-color: #2a2d34;    /* Very subtle separation */
+
+  /* App bar & burger menu */
+  --appbar-color: #1a1c20;    /* Same as surface (ChatGPT style) */
+  --burger-icon-color: #e5e7eb;
+
+  /* Scrollbar */
+  --scrollbar-track: #1a1c20;
+  --scrollbar-thumb: #374151;
+
+  /* Checkbox */
+  --checkbox-border: #4b5563;
+  --checkbox-bg: #1f2937;
+
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  }
 }
 
-/* body {
-  margin: 0; */
-  /* display: flex; */
-  /* place-items: center; */
-  /* min-width: 320px;
-  min-height: 100vh;
-} */
+/* ============================= */
+/* Global Styles                 */
+/* ============================= */
 html,
 body {
   height: 100%;
   margin: 0;
-  overflow: hidden; /* 🔑 */
+  overflow: hidden;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 h1 {
@@ -41,34 +106,41 @@ h1 {
   line-height: 1.1;
 }
 
+/* ============================= */
+/* Links                         */
+/* ============================= */
+a {
+  font-weight: 500;
+  color: var(--primary-color);
+  text-decoration: inherit;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--secondary-color);
+}
+
+/* ============================= */
+/* Buttons                       */
+/* ============================= */
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid var(--border-color);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.25s, color 0.25s;
 }
+
 button:hover {
-  border-color: #646cff;
+  border-color: var(--accent-color);
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }

@@ -1,22 +1,26 @@
-/* Page container: vertical layout */
+/* ============================= */
+/* Page Container                */
+/* ============================= */
 .tasksPage {
-  /* height: 100dvh; */
-  /* display: grid; */
-
   display: flex;
   flex: 1;
   flex-direction: column;
   min-height: 0;
   grid-template-rows: auto 1fr auto;
 
-  font-family: sans-serif;
+  font-family: inherit;
   width: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
-/* Header sticks at top */
+/* ============================= */
+/* Header: sticky at top         */
+/* ============================= */
 .taskSetHeader {
   flex-shrink: 0;
-  background: teal;
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
   padding: 8px;
   z-index: 10;
 
@@ -24,22 +28,26 @@
   justify-content: center;
 
   scroll-snap-type: x mandatory;
+
   -webkit-mask-image: linear-gradient(
-        to right,
-        transparent,
-        black 32px,
-        black calc(100% - 32px),
-        transparent
-    );
-    mask-image: linear-gradient(
-        to right,
-        transparent,
-        black 32px,
-        black calc(100% - 32px),
-        transparent
-    );
+    to right,
+    transparent,
+    black 32px,
+    black calc(100% - 32px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 32px,
+    black calc(100% - 32px),
+    transparent
+  );
 }
 
+/* ============================= */
+/* Horizontal task set list      */
+/* ============================= */
 .taskSetList {
   display: flex;
   gap: 8px;
@@ -56,30 +64,57 @@
 .taskSet {
   padding: 6px 12px;
   border-radius: 8px;
-  background: lightgray;
+  background-color: var(--border-color);
+  color: var(--text-color);
   cursor: pointer;
   white-space: nowrap;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .taskSet.active {
-  background: darkslategray;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--bg-color);
 }
 
-/* Scrollable area fills available space above footer */
+/* ============================= */
+/* Scrollable main area          */
+/* ============================= */
 .tasksScrollArea {
   flex: 1;
-  min-height: 0;   /* still essential */
+  min-height: 0; /* essential for flex layouts */
   overflow-y: auto;
 
   display: flex;
   justify-content: center;
   padding: 16px;
-
+  /* padding-bottom: 60px; */
+  
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
   -webkit-overflow-scrolling: touch;
 }
 
-/* Task list */
+.checkbox {
+  /* appearance: none; */
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--checkbox-border);
+  border-radius: 4px;
+  background: var(--checkbox-bg);
+
+  accent-color: var(--border-color);
+  cursor: pointer;
+}
+
+/* .checkbox:checked {
+  background: var(--primary-color);
+  border-color: var(--checkbox-border);
+} */
+
+
+/* ============================= */
+/* Task List                     */
+/* ============================= */
 .todolist {
   width: 100%;
   max-width: 750px;
@@ -90,8 +125,7 @@
 
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  /* align-items: center; */
+  gap: 8px;
 }
 
 /* Individual task cards */
@@ -101,32 +135,43 @@
   gap: 12px;
   padding: 12px;
   border-radius: 8px;
-  background-color: darkslategray;
-  color: white;
+  background-color: var(--surface-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  transition: background-color 0.2s, color 0.2s;
 }
 
+.todocard:hover {
+  background-color: var(--primary-color);
+  color: var(--bg-color);
+}
+
+/* ============================= */
+/* Footer                        */
+/* ============================= */
 .taskFooter {
-    flex-shrink: 0; /* prevent shrinking */
-    background-color: teal;
-    display: flex;
-    justify-content: center;
-    padding: 16px 0;
-    box-sizing: border-box;
-    max-width: 750px;
-}
-
-.CheckBox {
-  width: 20px;
-  height: 20px;
-}
-
-.taskManagementWrapper {
   flex-shrink: 0;
-  background-color: teal;
-  padding: 16px 0;
-
+  background-color: var(--surface-color);
   display: flex;
   justify-content: center;
+  padding: 16px 0;
+  box-sizing: border-box;
+  max-width: 750px;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+/* ============================= */
+/* Task Management Buttons       */
+/* ============================= */
+.taskManagementWrapper {
+  flex-shrink: 0;
+  background-color: var(--surface-color);
+  padding: 16px 0;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-color);
 }
 
 .taskManagementContainer {
@@ -135,8 +180,8 @@
 }
 
 .taskManagementContainer button {
-  background-color: white;
-  color: teal;
+  background-color: var(--primary-color);
+  color: var(--bg-color);
   border: none;
   padding: 8px 16px;
   border-radius: 6px;
@@ -146,6 +191,6 @@
 }
 
 .taskManagementContainer button:hover {
-  background-color: lightgray;
+  background-color: var(--primary-hover);
   transform: scale(1.05);
 }

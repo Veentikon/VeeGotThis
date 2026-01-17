@@ -170,59 +170,6 @@ export default function TodoList() {
     );
   };
 
-  // return (
-  //   <div className="tasksPage">
-  //     <header className="taskSetWrapper">
-  //       <div className="appColumn">
-  //         <ul className="taskSetList">
-  //           {taskSets.map(set => (
-  //             <li
-  //               key={set.id}
-  //               className={`taskSet ${set.id === selectedSetId ? "active" : ""}`}
-  //               onClick={() => setSelectedSetId(set.id)}
-  //             >
-  //               {set.name}
-  //             </li>
-  //           ))}
-  //         </ul>
-  //       </div>
-  //     </header>
-
-  //     <main className="tasksScrollArea">
-  //         <div className="appColumn">
-  //           <ul className="todolist">
-  //             {selectedSet?.tasks.map(task => (
-  //               <li key={task.id} className="todocard">
-  //                 <input
-  //                   type="checkbox"
-  //                   className="CheckBox"
-  //                   checked={task.completed}
-  //                   onChange={() => toggleTask(task.id)}
-  //                 />
-  //                 <span
-  //                   style={{
-  //                     textDecoration: task.completed ? "line-through" : "none",
-  //                     opacity: task.completed ? 0.6 : 1
-  //                   }}
-  //                 >
-  //                   {task.text}
-  //                 </span>
-  //               </li>
-  //             ))}
-  //           </ul>
-  //       </div>
-  //     </main>
-
-  //     <footer className="taskManagementWrapper">
-  //       <div className="appColumn taskManagementContainer">
-  //         <button type="button">+set</button>
-  //         <button type="button">+task</button>
-  //         <button type="button">-set</button>
-  //         <button type="button">-task</button>
-  //       </div>
-  //     </footer>
-  //   </div>
-  // );
   return (
     <div className="tasksPage">
       {/* Sticky Task Sets Header */}
@@ -247,10 +194,11 @@ export default function TodoList() {
             <li key={task.id} className="todocard">
               <input
                 type="checkbox"
-                className="CheckBox"
+                className="checkbox"
                 checked={task.completed}
                 onChange={() => toggleTask(task.id)}
               />
+              <label htmlFor={`task-${task.id}`} className="checkbox-label" />
               <span
                 style={{
                   textDecoration: task.completed ? "line-through" : "none",
