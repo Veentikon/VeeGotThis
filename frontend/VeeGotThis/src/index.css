@@ -77,6 +77,10 @@
   --checkbox-border: #4b5563;
   --checkbox-bg: #1f2937;
 
+  --input-bg: #1a1c20;
+  --input-bg-focus: #272a30;
+  /* --border-color: #374151; */
+
 
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -143,4 +147,12 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+
+.inputField {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1.2em;
+  background-color: var(--input-bg);
 }

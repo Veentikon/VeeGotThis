@@ -69,6 +69,7 @@
   cursor: pointer;
   white-space: nowrap;
   transition: background-color 0.2s, color 0.2s;
+
 }
 
 .taskSet.active {
@@ -146,6 +147,30 @@
   color: var(--bg-color);
 }
 
+.taskMenuWrapper {
+    margin-left: auto;
+}
+
+.setMenuWrapper {
+    margin-left: auto;
+}
+
+.taskMenu, .more {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* .taskMenu {
+  display: flex;
+  align-items: center;
+} */
+/* .more {
+  margin-left: auto;
+} */
 /* ============================= */
 /* Footer                        */
 /* ============================= */

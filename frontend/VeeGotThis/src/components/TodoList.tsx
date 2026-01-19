@@ -1,6 +1,10 @@
 import "./Todo.css";
 // import "./TaskManagement.css"
 import { useEffect, useState } from "react";
+import CreateTask from "./CreateTask";
+import CreateSet from "./CreateSet";
+// import Card from "@mui/material/Card";
+// import { CardContent } from "@mui/material";
 
 type Todo = {
   id: string;
@@ -170,6 +174,43 @@ export default function TodoList() {
     );
   };
 
+  const onAddTaskSet = (setName: string) => {
+    // TODO
+  }
+
+  const onRemoveTaskSet = (setId: string) => {
+    // TODO
+  }
+
+  const onRemoveTask = (taskId: string) => {
+    // TODO
+  }
+
+  const onUpdateTask = (taskId: string, newText: string) => {
+    // TODO
+  }
+
+  const onShareTaskSet = (setId: string, userId: string) => {
+    // TODO
+  }
+
+  const onUnshareTaskSet = (setId: string, userId: string) => {
+    // TODO
+  } 
+
+  const onDeleteCompletedTasks = (setId: string) => {
+    // TODO
+  } 
+
+  const onAddTask = () => {
+    // if (!selectedSetId) return;
+    console.log("Adding task to set:", selectedSetId);
+    setCreateTaskOpen(true);
+  }
+
+  const [ createTaskOpen, setCreateTaskOpen ] = useState(false);
+  const [ createSetOpen, setCreateSetOpen] = useState(false);
+
   return (
     <div className="tasksPage">
       {/* Sticky Task Sets Header */}
@@ -182,6 +223,22 @@ export default function TodoList() {
               onClick={() => setSelectedSetId(set.id)}
             >
               {set.name}
+              {/* <div className="setMenuWrapper"> */}
+                <button className="more">⋮</button>
+              {/* </div> */}
+              {/* <Card 
+                elevation={set.id === selectedSetId ? 1 : 8}
+                sx={{
+                  transition: "box-shadow 150ms ease, transform 150ms ease",
+                  transform: set.id === selectedSetId
+                    ? "translateY(2px)"
+                    : "translateY(0)",
+                }}
+              >
+                <CardContent>
+                  {set.name}
+                </CardContent>
+              </Card> */}
             </li>
           ))}
         </ul>
@@ -207,6 +264,9 @@ export default function TodoList() {
               >
                 {task.text}
               </span>
+              <div className="taskMenuWrapper">
+                <button className="taskMenu">⋮</button>
+              </div>
             </li>
           ))}
         </ul>
@@ -215,12 +275,23 @@ export default function TodoList() {
       {/* Footer controls */}
       <footer className="taskManagementWrapper">
         <div className="taskManagementContainer">
-          <button>+set</button>
-          <button>+task</button>
-          <button>-set</button>
-          <button>-task</button>
+          <button onClick={() => setCreateTaskOpen(true)}>+ Task</button>
+          <button onClick={() => setCreateSetOpen(true)}>+ Set</button>
         </div>
       </footer>
+      {createTaskOpen ? (
+        <CreateTask
+          onCreate={onAddTask}
+          onCancel={() => setCreateTaskOpen(false)}
+        />
+      ) : null}
+      {createSetOpen ? (
+        <CreateSet
+          onCreate={onAddTaskSet}
+          onCancel={() => setCreateSetOpen(false)}
+        />
+      ) : null}
+
     </div>
   );
 }
