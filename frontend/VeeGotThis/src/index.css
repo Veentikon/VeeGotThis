@@ -82,6 +82,7 @@
   /* --border-color: #374151; */
 
 
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -154,5 +155,6 @@ button:focus-visible {
   width: 100%;
   box-sizing: border-box;
   font-size: 1.2em;
+  text-decoration-color: var(--text-color);
   background-color: var(--input-bg);
 }

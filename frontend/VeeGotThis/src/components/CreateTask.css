@@ -27,6 +27,6 @@
 #taskInput {
     padding: 10px;
     font-size: 1em;
-
+    color: var(--text-color);
     background-color: var(--input-bg);
 }

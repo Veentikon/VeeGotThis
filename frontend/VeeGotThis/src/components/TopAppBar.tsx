@@ -105,11 +105,16 @@ export default function TopAppBar() {
         </Toolbar>
       </AppBar>
 
-
       <Drawer
         anchor="left"
         open={open}
         onClose={() => setOpen(false)}
+        sx={{
+          "& .MuiDrawer-paper": {
+            backgroundColor: "var(--input-bg)",
+            color: "var(--text-color)",
+          },
+        }}
       >
         <Box sx={{ width: 250 }}>
           <List>
@@ -127,7 +132,6 @@ export default function TopAppBar() {
           </List>
         </Box>
       </Drawer>
-      
     </>
   );
 }

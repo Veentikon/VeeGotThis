@@ -174,8 +174,35 @@ export default function TodoList() {
     );
   };
 
-  const onAddTaskSet = (setName: string) => {
-    // TODO
+  const onCreateTaskSet = (setName: string) => {
+    const newSet: TaskSet = {
+      id: crypto.randomUUID(),
+      name: setName,
+      ownerId: "user-123",
+      sharedWith: [],
+      tasks: [],
+    };
+
+    setTaskSets(prev => [...prev, newSet]);
+    setSelectedSetId(newSet.id);
+  }
+
+  const onCreateTask = (description: string) => { 
+    if (!selectedSetId) return;
+
+    const newTask: Todo = {
+      id: crypto.randomUUID(),
+      text: description,
+      completed: false,
+    };
+
+    setTaskSets(prev => 
+      prev.map(set =>
+        set.id === selectedSetId
+        ? { ...set, tasks: [...set.tasks, newTask]}
+        : set
+      )
+    )
   }
 
   const onRemoveTaskSet = (setId: string) => {
@@ -201,12 +228,6 @@ export default function TodoList() {
   const onDeleteCompletedTasks = (setId: string) => {
     // TODO
   } 
-
-  const onAddTask = () => {
-    // if (!selectedSetId) return;
-    console.log("Adding task to set:", selectedSetId);
-    setCreateTaskOpen(true);
-  }
 
   const [ createTaskOpen, setCreateTaskOpen ] = useState(false);
   const [ createSetOpen, setCreateSetOpen] = useState(false);
@@ -281,13 +302,13 @@ export default function TodoList() {
       </footer>
       {createTaskOpen ? (
         <CreateTask
-          onCreate={onAddTask}
+          onCreate={onCreateTask}
           onCancel={() => setCreateTaskOpen(false)}
         />
       ) : null}
       {createSetOpen ? (
         <CreateSet
-          onCreate={onAddTaskSet}
+          onCreate={onCreateTaskSet}
           onCancel={() => setCreateSetOpen(false)}
         />
       ) : null}
