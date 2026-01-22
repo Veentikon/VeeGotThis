@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from typing import List
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -12,16 +13,51 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class Task(BaseModel):
-    text: str = None
-    is_done: bool = False   
+    id: str
+    text: str
+    completed: bool = False
 
 class TaskSet(BaseModel):
-    name: str = None
+    id: str
+    name: str
+    owner_id: str
+    shared_with: List[str] = []
+    tasks: List[Task] = []
 
 class LoginRequest(BaseModel):
     username: str
     password: str
+
+class LoginResponse(BaseModel):
+    status: str
+    username: str
+    tasksets: list[TaskSet]
+
+
+# Fake data
+TASKSETS = [
+    TaskSet(
+        id="set-1",
+        name="Misc",
+        owner_id="Alice",
+        shared_with=[],
+        tasks=[
+            Task(id="task-1", text="Buy groceries", completed=False),
+            Task(id="task-2", text="Buy NAS compatible case", completed=False),
+        ],
+    ),
+    TaskSet(
+        id="set-2",
+        name="Personal",
+        owner_id="Alice",
+        shared_with=[],
+        tasks=[
+            Task(id="task-3", text="Finish assignment", completed=True),
+        ],
+    ),
+]
 
 # Healthcheck
 @app.post("/health")
@@ -36,12 +72,18 @@ def login(data: LoginRequest):
     if data.username != "Alice" or data.password != "password123":
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
+    user_tasksets = [
+        ts for ts in TASKSETS
+        if ts.owner_id == data.username or data.username in ts.shared_with
+    ]
+
     return {
         "status": "ok",
-        "username": data.username
+        "username": "data.username",
+        "tasksets": user_tasksets,
     }
 
-# Return full list of tasks
+# Return all tasks
 @app.get("/tasks", response_model=list[Task])
 def get_tasks():
     return {"status": "ok"}
@@ -76,10 +118,14 @@ def delete_task():
 def delete_taskset():
     return {"status": "ok"}
 
-# Get all task sets
+#TODO: Implement pagination for task sets and tasks
+# Get all task sets (By extension, includes their tasks)
 @app.get("/tasksets", response_model=list[TaskSet])
-def get_tasksets():
-    return {"status": "ok"}
+def get_tasksets(username: str):
+    return [
+        ts for ts in TASKSETS
+        if ts.owner_id == username or username in ts.shared_with
+    ]
 
 # Get specific task set
 @app.get("/tasksets/{taskset_id}", response_model=TaskSet)
@@ -115,3 +161,4 @@ def get_user_dashboard():
 @app.put("/users/{username}/dashboard")
 def update_user_dashboard():
     return {"status": "ok"}
+

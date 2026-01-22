@@ -1,10 +1,8 @@
 import "./Todo.css";
-// import "./TaskManagement.css"
 import { useEffect, useState } from "react";
 import CreateTask from "./CreateTask";
 import CreateSet from "./CreateSet";
-// import Card from "@mui/material/Card";
-// import { CardContent } from "@mui/material";
+import { useAuth } from "../context/AuthContext";
 
 type Todo = {
   id: string;
@@ -22,138 +20,8 @@ type TaskSet = {
 };
 
 export default function TodoList() {
-  const [taskSets, setTaskSets] = useState<TaskSet[]>([]);
+  const { user, taskSets, setTaskSets } = useAuth();
   const [selectedSetId, setSelectedSetId] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Simulated fetch
-    const data: TaskSet[] = [
-        {
-            id: "set-1",
-            name: "Misc",
-            ownerId: "user-123",
-            sharedWith: ["user-456"], // users who can access this set
-            // createdAt: "2025-01-15",
-            tasks: [
-            {
-                id: "task-1",
-                text: "Buy groceries",
-                completed: false
-            },
-            {
-                id: "task-2",
-                text: "Buy NAS compatible case",
-                completed: false
-            },
-            {
-                id: "task-10",
-                text: "Buy groceries",
-                completed: false
-            },
-            {
-                id: "task-11",
-                text: "Buy NAS compatible case",
-                completed: false
-            },
-            {
-                id: "task-12",
-                text: "Buy groceries",
-                completed: false
-            },
-            {
-                id: "task-13",
-                text: "Buy NAS compatible case",
-                completed: false
-            },
-            {
-                id: "task-14",
-                text: "Buy groceries",
-                completed: false
-            },
-            {
-                id: "task-15",
-                text: "Buy NAS compatible case",
-                completed: false
-            },
-            {
-                id: "task-16",
-                text: "Buy groceries",
-                completed: false
-            },
-            {
-                id: "task-17",
-                text: "Buy NAS compatible case",
-                completed: false
-            },
-            {
-                id: "task-18",
-                text: "Buy groceries",
-                completed: false
-            },
-            {
-                id: "task-19",
-                text: "Buy NAS compatible case",
-                completed: false
-            },
-        ]
-        },
-        {
-            id: "set-2",
-            name: "Personal",
-            ownerId: "user-123",
-            sharedWith: [],
-            tasks: [
-            {
-                id: "task-3",
-                text: "Finish assignment",
-                completed: true
-            }
-            ]
-        },
-        {
-            id: "set-3",
-            name: "Misk",
-            ownerId: "user-123",
-            sharedWith: [],
-            tasks: [
-            {
-                id: "task-4",
-                text: "Do some stuff",
-                completed: true
-            }
-            ]
-        },
-        {
-            id: "set-5",
-            name: "Personallen",
-            ownerId: "user-123",
-            sharedWith: [],
-            tasks: [
-            {
-                id: "task-6",
-                text: "Do some other stuff",
-                completed: true
-            }
-            ]
-        },
-        {
-            id: "set-6",
-            name: "Personal",
-            ownerId: "user-123",
-            sharedWith: [],
-            tasks: [
-            {
-                id: "task-7",
-                text: "Finish all the stuff",
-                completed: true
-            }
-            ]
-        }
-    ];
-
-    setTaskSets(data);
-    setSelectedSetId(data[0].id); // default selection
-  }, []);
 
   const selectedSet = taskSets.find(set => set.id === selectedSetId);
 
