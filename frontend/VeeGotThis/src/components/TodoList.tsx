@@ -55,19 +55,29 @@ export default function TodoList() {
     setSelectedSetId(newSet.id);
   }
 
-  const onCreateTask = (description: string) => { 
+  async function onCreateTask(description: string) { 
     if (!selectedSetId) return;
 
-    const newTask: Todo = {
-      id: crypto.randomUUID(),
-      text: description,
-      completed: false,
-    };
+    const res = await fetch("http://localhost:8000/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      // body: JSON.stringify({ TaskSetID: selectedSetId, description }),
+      body: JSON.stringify({
+        taskSetID: selectedSetId,
+        description: description,
+      })
+    });
 
+    if (!res.ok) {
+      throw new Error("Task creation failed");
+    }
+    const data = await res.json();
+
+    /** When successfull, update the gui list */
     setTaskSets(prev => 
       prev.map(set =>
         set.id === selectedSetId
-        ? { ...set, tasks: [...set.tasks, newTask]}
+        ? { ...set, tasks: [...set.tasks, data.newTask]}
         : set
       )
     )

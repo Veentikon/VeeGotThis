@@ -8,7 +8,6 @@ type CreateTaskProps = {
 
 export default function CreateTask({ onCreate, onCancel }: CreateTaskProps) {
     const [taskDescription, setDescription] = useState("");
-
     const handleCreate = () => {
         if (!taskDescription.trim()) return;
         onCreate(taskDescription);

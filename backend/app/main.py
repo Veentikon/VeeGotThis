@@ -1,3 +1,4 @@
+import uuid
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
@@ -22,9 +23,22 @@ class Task(BaseModel):
 class TaskSet(BaseModel):
     id: str
     name: str
-    owner_id: str
+    owner_id: str 
     shared_with: List[str] = []
-    tasks: List[Task] = []
+    tasks: List[Task] = [] # In principle, I could instead use id instead
+    # that would align better with how data is stored in SQL db
+    # Another option is to group tasks by TaskSet id
+    # Create a table where key is TaskSetID
+    # | TaskSetID | TaskID | description | completed | OwnerID  | SharedWith |
+    # | 1         | 1      | Finish task | False     | 1        | 2          |
+    # | 1         | 2      | Buy thing   | False     | 1        | N/A        |
+    # | 2         | 4      | Read book   | True      | 2        | 1          |
+
+    # Another table would correlate user Ids with their task sets
+    # | UserID     | TaskSetID | Task # | Completed # |
+    # | 1          | 1         | 23     | 15          |
+    # Or is it better to instead have a list of TaskSetIDs that belong
+    # to a user?
 
 class LoginRequest(BaseModel):
     username: str
@@ -35,6 +49,9 @@ class LoginResponse(BaseModel):
     username: str
     tasksets: list[TaskSet]
 
+class CreateTaskRequest(BaseModel):
+    taskSetID: str
+    description: str
 
 # Fake data
 TASKSETS = [
@@ -100,8 +117,25 @@ def update_task():
 
 # Create a new task
 @app.post("/tasks")
-def create_task(task: Task):
-    return {"status": "ok"}
+# def create_task(taskSetID, description):
+def create_task(data: CreateTaskRequest):
+    taskSetID = data.taskSetID
+    description = data.description
+
+    print(taskSetID, description) # =====================================
+
+    # newTask = Task(id=uuid.uuid4(), text=description, completed=False)
+    newTask = Task(id=str(uuid.uuid4()), text=description, completed=False)
+    for set in TASKSETS:
+        if set.id==taskSetID:
+            set.tasks.append(newTask)
+    
+    print("Created task:", newTask)
+
+    return {
+        "status": "ok",
+        "newTask": newTask
+    }
 
 # Create new set
 @app.post("/tasksets")
