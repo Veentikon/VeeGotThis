@@ -42,17 +42,24 @@ export default function TodoList() {
     );
   };
 
-  const onCreateTaskSet = (setName: string) => {
-    const newSet: TaskSet = {
-      id: crypto.randomUUID(),
-      name: setName,
-      ownerId: "user-123",
-      sharedWith: [],
-      tasks: [],
-    };
+  async function onCreateTaskSet(setName: string) {
+    const res = await fetch("http://localhost:8000/tasksets", {
+      method: "POST",
+      headers: { "Content-Type": "application/json"},
+      body: JSON.stringify({
+        name: setName,
+        ownerId: user,
+      })
+    })
 
-    setTaskSets(prev => [...prev, newSet]);
-    setSelectedSetId(newSet.id);
+    if (!res.ok) {
+      throw new Error("Task set creation failed");
+    }
+
+    const data = await res.json();
+
+    setTaskSets(prev => [...prev, data.newSet]);
+    setSelectedSetId(data.newSet.id);
   }
 
   async function onCreateTask(description: string) { 
@@ -61,7 +68,6 @@ export default function TodoList() {
     const res = await fetch("http://localhost:8000/tasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      // body: JSON.stringify({ TaskSetID: selectedSetId, description }),
       body: JSON.stringify({
         taskSetID: selectedSetId,
         description: description,

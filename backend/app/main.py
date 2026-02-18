@@ -53,10 +53,14 @@ class CreateTaskRequest(BaseModel):
     taskSetID: str
     description: str
 
+class CreateTaskSetRequest(BaseModel):
+    name: str
+    ownerId: str
+
 # Fake data
 TASKSETS = [
     TaskSet(
-        id="set-1",
+        id=str(uuid.uuid4()),
         name="Misc",
         owner_id="Alice",
         shared_with=[],
@@ -66,7 +70,7 @@ TASKSETS = [
         ],
     ),
     TaskSet(
-        id="set-2",
+        id=str(uuid.uuid4()),
         name="Personal",
         owner_id="Alice",
         shared_with=[],
@@ -117,14 +121,10 @@ def update_task():
 
 # Create a new task
 @app.post("/tasks")
-# def create_task(taskSetID, description):
 def create_task(data: CreateTaskRequest):
     taskSetID = data.taskSetID
     description = data.description
 
-    print(taskSetID, description) # =====================================
-
-    # newTask = Task(id=uuid.uuid4(), text=description, completed=False)
     newTask = Task(id=str(uuid.uuid4()), text=description, completed=False)
     for set in TASKSETS:
         if set.id==taskSetID:
@@ -139,8 +139,22 @@ def create_task(data: CreateTaskRequest):
 
 # Create new set
 @app.post("/tasksets")
-def create_taskset(taskset: TaskSet):
-    return {"status": "ok"}
+def create_taskset(data: CreateTaskSetRequest):
+
+    newSet = TaskSet(
+        id=str(uuid.uuid4()),
+        name=data.name,
+        owner_id="Alice",
+        shared_with=[],
+        tasks=[],
+    )
+
+    TASKSETS.append(newSet) # Update in-memory data
+
+    return {
+        "status": "ok",
+        "newSet": newSet
+    }
 
 # Delete a specific task
 @app.delete("/tasks/{task_id}")
