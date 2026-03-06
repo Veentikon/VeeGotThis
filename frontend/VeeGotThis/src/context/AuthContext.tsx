@@ -1,6 +1,7 @@
 // src/context/AuthContext.tsx
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiFetch } from "../api/api";
 
 type Task = {
   id: string;
@@ -27,6 +28,9 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<string | null>(null);
   const [taskSets, setTaskSets] = useState<TaskSet[]>([]);
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token")
+  );
   const navigate = useNavigate();
 
   async function login(username: string, password: string) {
@@ -41,17 +45,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     const data = await res.json();
+    const token = data.access_token;
 
-    console.log(data.tasksets);
     // Set data and navigate to home page
+    setToken(token);
+    localStorage.setItem("token", token);
     setUser(data.username);
-    setTaskSets(data.tasksets);
+
+    const tasksets = await apiFetch("/tasksets");
+    setTaskSets(tasksets);
+
     navigate("/", { replace: true });
   }
 
   function logout() {
     setUser(null);
     setTaskSets([]);
+    setToken(null);
+    localStorage.removeItem("token");
   }
 
   return (

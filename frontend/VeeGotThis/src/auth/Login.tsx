@@ -8,7 +8,7 @@ function Login() {
     const { login } = useAuth();
 
     async function handleLogin() {
-        await login("Alice", "password123");
+        await login(username, password);
     };
 
     return (
@@ -16,7 +16,7 @@ function Login() {
             <h2>Login</h2>
             <input
                 className="inputField"
-                id='inpul'
+                id='uInput'
                 type="text"
                 placeholder="Username"
                 value={username}
@@ -24,7 +24,7 @@ function Login() {
             />
             <input
                 className="inputField"
-                id='inppl'
+                id='pInput'
                 type="password"
                 placeholder="Password"
                 value={password}
