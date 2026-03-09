@@ -33,6 +33,7 @@ def create_access_token(username: str):
 
 # token validation
 def get_current_user(token: str = Depends(oauth2_scheme)) -> str:
+    print("Validating token:", token) ## ================================================= test
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username = payload.get("sub")

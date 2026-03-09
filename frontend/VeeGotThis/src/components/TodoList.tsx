@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import CreateTask from "./CreateTask";
 import CreateSet from "./CreateSet";
 import { useAuth } from "../context/AuthContext";
+import { apiFetch } from "../api/api";
 
 type Todo = {
   id: string;
@@ -22,8 +23,43 @@ type TaskSet = {
 export default function TodoList() {
   const { user, taskSets, setTaskSets } = useAuth();
   const [selectedSetId, setSelectedSetId] = useState<string | null>(null);
+  const [menuAnchorSet, setMenuAnchorSet] = useState<null | HTMLElement>(null);
+  const [menuAnchorTask, setMenuAnchorTask] = useState<null | HTMLElement>(null);
+  const [menuSetId, setMenuSetId] = useState<string | null>(null);
+  const [menuTaskId, setMenuTaskId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const close = () => setMenuAnchorSet(null);
+    window.addEventListener("click", close);
+
+    return () => window.removeEventListener("click", close);
+  }, []);
+  useEffect(() => {
+    const close = () => setMenuAnchorTask(null);
+    window.addEventListener("click", close);
+
+    return () => window.removeEventListener("click", close);
+  })
 
   const selectedSet = taskSets.find(set => set.id === selectedSetId);
+  const openSetMenu = (e: React.MouseEvent<HTMLButtonElement>, setId: string) => {
+    e.stopPropagation();
+    setMenuAnchorSet(e.currentTarget);
+    setMenuSetId(setId);
+  };
+  const openTaskMenu = (e: React.MouseEvent<HTMLButtonElement>, taskId: string) => {
+    e.stopPropagation();
+    setMenuAnchorTask(e.currentTarget);
+    setMenuTaskId(taskId);
+  };
+  const closeSetMenu = () => {
+    setMenuAnchorSet(null);
+    setMenuSetId(null);
+  };
+  const closeTaskMenu = () => {
+    setMenuAnchorTask(null);
+    setMenuTaskId(null);
+  };
 
   const toggleTask = (taskId: string) => {
     setTaskSets(prev =>
@@ -43,41 +79,37 @@ export default function TodoList() {
   };
 
   async function onCreateTaskSet(setName: string) {
-    const res = await fetch("http://localhost:8000/tasksets", {
+    if (!selectedSetId) return;
+    const data = await apiFetch("/tasksets", {
       method: "POST",
-      headers: { "Content-Type": "application/json"},
       body: JSON.stringify({
         name: setName,
         ownerId: user,
       })
-    })
+    });
 
-    if (!res.ok) {
-      throw new Error("Task set creation failed");
+    if (`${data.status}`.startsWith("4")) {
+      throw new Error(data.detail || "Task set creation failed");
     }
-
-    const data = await res.json();
 
     setTaskSets(prev => [...prev, data.newSet]);
     setSelectedSetId(data.newSet.id);
   }
 
-  async function onCreateTask(description: string) { 
+  async function onCreateTask(description: string) {
     if (!selectedSetId) return;
 
-    const res = await fetch("http://localhost:8000/tasks", {
+    const data = await apiFetch("/tasks", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         taskSetID: selectedSetId,
         description: description,
       })
     });
 
-    if (!res.ok) {
-      throw new Error("Task creation failed");
+    if (`${data.status}`.startsWith("4")) {
+      throw new Error(data.detail || "Task creation failed");
     }
-    const data = await res.json();
 
     /** When successfull, update the gui list */
     setTaskSets(prev => 
@@ -89,11 +121,34 @@ export default function TodoList() {
     )
   }
 
-  const onRemoveTaskSet = (setId: string) => {
-    // TODO
+  /* Delete selected set */
+  const onRemoveTaskSet = async (setId: string) => {
+    if (!window.confirm("Are you sure you want to delete this task set?")) return;
+    const data = await apiFetch("/tasksets", {
+      method: "DELETE",
+      body: JSON.stringify({
+        taskSetID: setId,
+      })
+    });
+    if (`${data.status}`.startsWith("4")) {
+      throw new Error(data.detail || "Task set deletion failed");
+    }
+
+    setTaskSets(prev => prev.filter(set => set.id !== setId));
+    setSelectedSetId(null);
   }
 
+
   const onRemoveTask = (taskId: string) => {
+    // TODO
+  }
+  const onAssignTaskToUser = (taskId: string) => {
+    // TODO
+  }
+  const onEditTask = (taskId: string) => {
+    // TODO
+  }
+  const onMoveTask = (taskId: string) => {
     // TODO
   }
 
@@ -129,7 +184,9 @@ export default function TodoList() {
             >
               {set.name}
               {/* <div className="setMenuWrapper"> */}
-                <button className="more">⋮</button>
+                <button className="more"
+                  onClick={(e) => openSetMenu(e, set.id)}
+                >⋮</button>
               {/* </div> */}
               {/* <Card 
                 elevation={set.id === selectedSetId ? 1 : 8}
@@ -170,7 +227,9 @@ export default function TodoList() {
                 {task.text}
               </span>
               <div className="taskMenuWrapper">
-                <button className="taskMenu">⋮</button>
+                <button className="taskMenu"
+                  onClick={(e) => {openTaskMenu(e, task.id)}}
+                >⋮</button>
               </div>
             </li>
           ))}
@@ -197,6 +256,55 @@ export default function TodoList() {
         />
       ) : null}
 
+      {menuAnchorSet && (
+        <div
+          className="dropdownMenu"
+          style={{
+            position: "absolute",
+            top: menuAnchorSet.getBoundingClientRect().bottom + window.scrollY,
+            left: menuAnchorSet.getBoundingClientRect().left,
+          }}
+        >
+          <button onClick={() => { onShareTaskSet(menuSetId!, "user"); closeSetMenu(); }}>
+            Share
+          </button>
+          <button onClick={() => { onDeleteCompletedTasks(menuSetId!); closeSetMenu(); }}>
+            Delete Completed
+          </button>
+          <button onClick={() => { onRemoveTaskSet(menuSetId!); closeSetMenu(); }}>
+            Delete Set
+          </button>
+          <button onClick={() => { onRemoveTaskSet(menuSetId!); closeSetMenu(); }}>
+            Set as Routine
+          </button>
+        </div>
+      )}
+      {menuAnchorTask && (
+        <div
+          className="dropdownMenu"
+          style={{
+            position: "absolute",
+            top: menuAnchorTask.getBoundingClientRect().bottom + window.scrollY,
+            left: menuAnchorTask.getBoundingClientRect().left,
+          }}
+        >
+          {/* <button onClick={() => { onShareTask(menuTaskId!, "user"); closeTaskMenu(); }}>
+            Share
+          </button> */}
+          <button onClick={() => { onAssignTaskToUser(menuTaskId!); closeTaskMenu(); }}>
+            Assign to user
+          </button>
+          <button onClick={() => { onRemoveTask(menuTaskId!); closeTaskMenu(); }}>
+            Delete Task
+          </button>
+          <button onClick={() => { onEditTask(menuTaskId!); closeTaskMenu(); }}>
+            Edit
+          </button>
+          <button onClick={() => { onMoveTask(menuTaskId!); closeTaskMenu(); }}>
+            Assign to set
+          </button>
+        </div>
+      )}
     </div>
   );
 }

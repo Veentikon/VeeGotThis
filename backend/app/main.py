@@ -157,15 +157,17 @@ def update_task(current_user: str = Depends(get_current_user)):
 # Create a new task
 @app.post("/tasks")
 def create_task(data: CreateTaskRequest, current_user: str = Depends(get_current_user)):
+    print("Creating task with data:", data) ## ================================================= test
     taskSetID = data.taskSetID
     description = data.description
 
     newTask = Task(id=str(uuid.uuid4()), text=description, completed=False)
+    print("New task created:", newTask) ## ================================================= test
     for set in TASKSETS:
         if set.id==taskSetID:
             set.tasks.append(newTask)
-    
-    print("Created task:", newTask)
+
+    print("Updated TASKSETS:", TASKSETS) ## ================================================= test
 
     return {
         "status": "ok",

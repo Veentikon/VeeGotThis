@@ -219,3 +219,29 @@
   background-color: var(--primary-hover);
   transform: scale(1.05);
 }
+
+/* ============================= */
+/* Dropdown Menu                 */
+/* ============================= */
+.dropdownMenu {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 4px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+
+.dropdownMenu button {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdownMenu button:hover {
+  background: var(--primary-hover);
+}
