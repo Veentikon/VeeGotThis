@@ -33,6 +33,8 @@ class TaskSet(BaseModel):
     owner_id: str 
     shared_with: List[str] = []
     tasks: List[Task] = [] # In principle, I could instead use id instead
+    routine: bool = False # Whether this task set is a routine or not. Routines are task sets that are meant to be completed on a regular basis, and have some special properties (e.g. they can be marked as completed for the day, but not deleted or archived)
+
     # that would align better with how data is stored in SQL db
     # Another option is to group tasks by TaskSet id
     # Create a table where key is TaskSetID
@@ -66,6 +68,8 @@ class CreateTaskSetRequest(BaseModel):
 
 class UpdateTaskSetRequest(BaseModel):
     name: str
+    shared_with: List[str] = []
+    routine: bool
 
 # DUMMY DATA - In-memory storage for testing purposes ===========================
 USERS = {
@@ -82,6 +86,7 @@ TASKSETS = [
             Task(id="task-1", text="Buy groceries", completed=False),
             Task(id="task-2", text="Buy NAS compatible case", completed=False),
         ],
+        routine=False,
     ),
     TaskSet(
         id=str(uuid.uuid4()),
@@ -91,6 +96,7 @@ TASKSETS = [
         tasks=[
             Task(id="task-3", text="Finish assignment", completed=True),
         ],
+        routine=True,
     ),
 ]
 # ==========================================================================
@@ -120,25 +126,6 @@ def login(data: LoginRequest):
         "username": data.username
     }
 
-# @app.post("/login")
-# def login(data: LoginRequest):
-#     print("Login attempt:", data.username)
-
-#     # validate credentials
-#     if data.username not in USERS or USERS[data.username]["password"] != data.password:
-#         raise HTTPException(status_code=401, detail="Invalid credentials")
-
-#     user_tasksets = [
-#         ts for ts in TASKSETS
-#         if ts.owner_id == data.username or data.username in ts.shared_with
-#     ]
-
-#     return {
-#         "status": "ok",
-#         "username": "data.username",
-#         "tasksets": user_tasksets,
-#     }
-
 # Return all tasks
 @app.get("/tasks", response_model=list[Task])
 def get_tasks(current_user: str = Depends(get_current_user)):
@@ -157,17 +144,13 @@ def update_task(current_user: str = Depends(get_current_user)):
 # Create a new task
 @app.post("/tasks")
 def create_task(data: CreateTaskRequest, current_user: str = Depends(get_current_user)):
-    print("Creating task with data:", data) ## ================================================= test
     taskSetID = data.taskSetID
     description = data.description
 
     newTask = Task(id=str(uuid.uuid4()), text=description, completed=False)
-    print("New task created:", newTask) ## ================================================= test
     for set in TASKSETS:
         if set.id==taskSetID:
             set.tasks.append(newTask)
-
-    print("Updated TASKSETS:", TASKSETS) ## ================================================= test
 
     return {
         "status": "ok",
@@ -197,9 +180,18 @@ def create_taskset(data: CreateTaskSetRequest, current_user: str = Depends(get_c
 @app.delete("/tasks/{task_id}")
 def delete_task(task_id: str, current_user: str = Depends(get_current_user)):
     global TASKSETS
+
+    # This will be replaced with a querry to the database that deletes the task with the given ID
+    # and checks that the user has permissions to delete it (is owner or shared with)
     for ts in TASKSETS:
-        ts.tasks = [task for task in ts.tasks if task.id != task_id]
-    return {"status": "ok"}
+        if not (ts.owner_id == current_user or current_user in ts.shared_with):
+            continue
+
+        for task in ts.tasks:
+            if task.id == task_id:
+                ts.tasks = [task for task in ts.tasks if task.id != task_id]
+                return {"status": "ok"}
+    raise HTTPException(status_code=404, detail="Task not found")
 
 # Delete a specific task set
 @app.delete("/tasksets/{taskset_id}")
@@ -238,7 +230,8 @@ def update_taskset(taskset_id: str, data: UpdateTaskSetRequest, current_user: st
         if ts.id == taskset_id and ts.owner_id == current_user:
             ts.name = data.name
             ts.shared_with = data.shared_with
-            return {"status": "ok"}
+            if data.routine:  ts.routine = True # change set to a routine
+            return {"status": "ok"} # If successful, there is no need to send the whole set back, but realize the update on the front end if the status is ok
     raise HTTPException(status_code=404, detail="TaskSet not found")
 
 # Assign task to user

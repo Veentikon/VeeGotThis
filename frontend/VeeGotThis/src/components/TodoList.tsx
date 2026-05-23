@@ -11,15 +11,6 @@ type Todo = {
   completed: boolean;
 };
 
-type TaskSet = {
-  id: string;
-  ownerId: string;
-  sharedWith: string[];
-//   createdAt: string;
-  name: string;
-  tasks: Todo[];
-};
-
 export default function TodoList() {
   const { user, taskSets, setTaskSets } = useAuth();
   const [selectedSetId, setSelectedSetId] = useState<string | null>(null);
@@ -39,7 +30,7 @@ export default function TodoList() {
     window.addEventListener("click", close);
 
     return () => window.removeEventListener("click", close);
-  })
+  }, []);
 
   const selectedSet = taskSets.find(set => set.id === selectedSetId);
   const openSetMenu = (e: React.MouseEvent<HTMLButtonElement>, setId: string) => {
@@ -122,13 +113,11 @@ export default function TodoList() {
   }
 
   /* Delete selected set */
-  const onRemoveTaskSet = async (setId: string) => {
+  const onDeleteTaskSet = async (setId: string) => {
     if (!window.confirm("Are you sure you want to delete this task set?")) return;
-    const data = await apiFetch("/tasksets", {
+
+    const data = await apiFetch(`/tasksets/${setId}`, {
       method: "DELETE",
-      body: JSON.stringify({
-        taskSetID: setId,
-      })
     });
     if (`${data.status}`.startsWith("4")) {
       throw new Error(data.detail || "Task set deletion failed");
@@ -138,35 +127,80 @@ export default function TodoList() {
     setSelectedSetId(null);
   }
 
+  const onRemoveTask = async (taskId: string) => {
+    if (!selectedSetId) return;
+    
+    const data = await apiFetch("/tasks", {
+      method: "DELETE",
+      body: JSON.stringify({
+        taskSetID: selectedSetId,
+        taskID: taskId,
+      })
+    });
 
-  const onRemoveTask = (taskId: string) => {
-    // TODO
+    if (`${data.status}`.startsWith("4")) {
+      throw new Error(data.detail || "Task deletion failed");
+    }
+
+    setTaskSets(prev => 
+      prev.map(set =>
+        set.id === selectedSetId
+          ? { ...set, tasks: set.tasks.filter(t => t.id !== taskId) }
+          : set
+      )
+    );
   }
+
+  // Need to implement users and permissions before these can be implemented
   const onAssignTaskToUser = (taskId: string) => {
     // TODO
   }
+
+  // Open a dialog, can modify the existing text and save changes (can reuse the CreateTask component)
   const onEditTask = (taskId: string) => {
     // TODO
   }
+  // Might need to implement a separate task set list dialog for this, where you can move tasks between sets by dragging them
   const onMoveTask = (taskId: string) => {
     // TODO
   }
 
-  const onUpdateTask = (taskId: string, newText: string) => {
-    // TODO
-  }
-
+  // Need to implement users and persmissions first, also need to implement a way to search for users to share with (probably in a separate dialog)
   const onShareTaskSet = (setId: string, userId: string) => {
     // TODO
   }
-
   const onUnshareTaskSet = (setId: string, userId: string) => {
     // TODO
   } 
 
+  // Need to define the scope, delete all recently marked completed tasks or delete every completed task, (include confirmation dialog)
   const onDeleteCompletedTasks = (setId: string) => {
     // TODO
   } 
+
+  const onSetAsRoutine = async () => {
+    const mySet = taskSets.find(s => s.id === selectedSetId);
+
+    const data = await apiFetch(`/tasksets/${selectedSetId}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        name: mySet?.name || "Routine Set",
+        shared_with: [], // TODO: implement sharing first, then allow user to select who to share with when setting as routine
+        taskSetID: selectedSetId,
+        routine: true,
+      })}
+    );
+    if (data.status.toString().startsWith("4")) {
+      throw new Error(data.detail || "Failed to set task set as routine");
+    }
+    setTaskSets(prev => 
+      prev.map(set =>
+        set.id === selectedSetId
+          ? { ...set, routine: true }
+          : set
+      )
+    );
+  }
 
   const [ createTaskOpen, setCreateTaskOpen ] = useState(false);
   const [ createSetOpen, setCreateSetOpen] = useState(false);
@@ -182,25 +216,16 @@ export default function TodoList() {
               className={`taskSet ${set.id === selectedSetId ? "active" : ""}`}
               onClick={() => setSelectedSetId(set.id)}
             >
-              {set.name}
-              {/* <div className="setMenuWrapper"> */}
-                <button className="more"
-                  onClick={(e) => openSetMenu(e, set.id)}
-                >⋮</button>
-              {/* </div> */}
-              {/* <Card 
-                elevation={set.id === selectedSetId ? 1 : 8}
-                sx={{
-                  transition: "box-shadow 150ms ease, transform 150ms ease",
-                  transform: set.id === selectedSetId
-                    ? "translateY(2px)"
-                    : "translateY(0)",
-                }}
-              >
-                <CardContent>
-                  {set.name}
-                </CardContent>
-              </Card> */}
+              {/* {set.routine && <div className="routine-bar"/>} */}
+              <div className="setContents">
+                <div className="set">
+                  <span>{set.name}</span>
+                  <button className="more"
+                    onClick={(e) => {setSelectedSetId(set.id), openSetMenu(e, set.id)}}
+                  >⋮</button>
+                </div>
+                {set.routine && <div className="routine-bar"></div>}
+              </div>
             </li>
           ))}
         </ul>
@@ -271,10 +296,10 @@ export default function TodoList() {
           <button onClick={() => { onDeleteCompletedTasks(menuSetId!); closeSetMenu(); }}>
             Delete Completed
           </button>
-          <button onClick={() => { onRemoveTaskSet(menuSetId!); closeSetMenu(); }}>
+          <button onClick={() => { onDeleteTaskSet(menuSetId!); closeSetMenu(); }}>
             Delete Set
           </button>
-          <button onClick={() => { onRemoveTaskSet(menuSetId!); closeSetMenu(); }}>
+          <button onClick={() => { onSetAsRoutine(); closeSetMenu(); }}>
             Set as Routine
           </button>
         </div>

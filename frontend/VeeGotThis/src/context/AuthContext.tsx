@@ -13,7 +13,18 @@ type TaskSet = {
   id: string;
   name: string;
   tasks: Task[];
+  routine?: boolean;
 };
+
+// type TaskSet = {
+//   id: string;
+//   ownerId: string;
+//   sharedWith: string[];
+// //   createdAt: string;
+//   name: string;
+//   tasks: Todo[];
+//   routine?: boolean;
+// };
 
 type AuthContextType = {
   user: string | null;
