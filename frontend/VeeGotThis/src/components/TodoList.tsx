@@ -196,7 +196,7 @@ export default function TodoList() {
     setTaskSets(prev => 
       prev.map(set =>
         set.id === selectedSetId
-          ? { ...set, routine: true }
+          ? { ...set, routine: data.routine }
           : set
       )
     );

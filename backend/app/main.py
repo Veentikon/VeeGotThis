@@ -106,6 +106,7 @@ TASKSETS = [
 def health():
     return {"status": "ok"}
 
+# Login endpoint
 @app.post("/login")
 def login(data: LoginRequest):
 
@@ -230,8 +231,9 @@ def update_taskset(taskset_id: str, data: UpdateTaskSetRequest, current_user: st
         if ts.id == taskset_id and ts.owner_id == current_user:
             ts.name = data.name
             ts.shared_with = data.shared_with
-            if data.routine:  ts.routine = True # change set to a routine
-            return {"status": "ok"} # If successful, there is no need to send the whole set back, but realize the update on the front end if the status is ok
+            if data.routine and ts.routine: ts.routine = False
+            elif data.routine and not ts.routine: ts.routine = True # change set to a routine
+            return {"status": "ok", "routine": ts.routine} # If successful, there is no need to send the whole set back, but realize the update on the front end if the status is ok
     raise HTTPException(status_code=404, detail="TaskSet not found")
 
 # Assign task to user
