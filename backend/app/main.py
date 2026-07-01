@@ -3,14 +3,8 @@ from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
-
-# Diagnostic imports for auth functions
-# import os
-# print("Current working directory:", os.getcwd())
-# print("Contents of current directory:", os.listdir())
-
 from app.auth import verify_password, create_access_token, get_current_user, hash_password
-
+import db
 
 app = FastAPI()
 
@@ -22,6 +16,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Initialize database
+db.init_db()
+
+# Request and response models ==============================================================================
 class Task(BaseModel):
     id: str
     text: str
@@ -34,20 +32,6 @@ class TaskSet(BaseModel):
     shared_with: List[str] = []
     tasks: List[Task] = [] # In principle, I could instead use id instead
     routine: bool = False # Whether this task set is a routine or not. Routines are task sets that are meant to be completed on a regular basis, and have some special properties (e.g. they can be marked as completed for the day, but not deleted or archived)
-
-    # that would align better with how data is stored in SQL db
-    # Another option is to group tasks by TaskSet id
-    # Create a table where key is TaskSetID
-    # | TaskSetID | TaskID | description | completed | OwnerID  | SharedWith |
-    # | 1         | 1      | Finish task | False     | 1        | 2          |
-    # | 1         | 2      | Buy thing   | False     | 1        | N/A        |
-    # | 2         | 4      | Read book   | True      | 2        | 1          |
-
-    # Another table would correlate user Ids with their task sets
-    # | UserID     | TaskSetID | Task # | Completed # |
-    # | 1          | 1         | 23     | 15          |
-    # Or is it better to instead have a list of TaskSetIDs that belong
-    # to a user?
 
 class LoginRequest(BaseModel):
     username: str
@@ -70,6 +54,7 @@ class UpdateTaskSetRequest(BaseModel):
     name: str
     shared_with: List[str] = []
     routine: bool
+# =========================================================================================
 
 # DUMMY DATA - In-memory storage for testing purposes ===========================
 USERS = {
@@ -109,17 +94,18 @@ def health():
 # Login endpoint
 @app.post("/login")
 def login(data: LoginRequest):
-
-    if data.username not in USERS:
+    user = db.get_user_by_username(data.username)  # This is just to ensure the user exists in the database, but we still need to verify the password
+    
+    if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     if not verify_password(
         data.password,
-        USERS[data.username]["password"]
+        user["password_hash"]  # Assuming the hashed password is in the "password_hash" field of the user record
     ):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    token = create_access_token(data.username)
+    token = create_access_token(user["id"])  # Assuming the user record has an "id" field
 
     return {
         "access_token": token,
@@ -162,7 +148,7 @@ def create_task(data: CreateTaskRequest, current_user: str = Depends(get_current
 @app.post("/tasksets")
 def create_taskset(data: CreateTaskSetRequest, current_user: str = Depends(get_current_user)):
 
-    newSet = TaskSet(
+    newSet = TaskSet( # 
         id=str(uuid.uuid4()),
         name=data.name,
         owner_id=current_user,
@@ -268,6 +254,15 @@ def get_user_tasks(current_user: str = Depends(get_current_user)):
                 tasks.append(task)
     return tasks
 
+# User handling endpoints =============================================================================
+# Create a new user
+@app.put("/users")
+def create_user(data: CreateTaskSetRequest):
+    if data.ownerId in USERS:
+        raise HTTPException(status_code=400, detail="User already exists")
+    USERS[data.ownerId] = {"password": hash_password("default"), "id": str(uuid.uuid4())}
+    return {"status": "ok", "username": data.ownerId}
+
 # Get user's dashboard
 @app.get("/users/{username}/dashboard")
 def get_user_dashboard(current_user: str = Depends(get_current_user)):
@@ -277,4 +272,4 @@ def get_user_dashboard(current_user: str = Depends(get_current_user)):
 @app.put("/users/{username}/dashboard")
 def update_user_dashboard(current_user: str = Depends(get_current_user)):
     return {"status": "ok"}
-
+# ======================================================================================================
