@@ -5,11 +5,11 @@ import CreateSet from "./CreateSet";
 import { useAuth } from "../context/AuthContext";
 import { apiFetch } from "../api/api";
 
-type Todo = {
-  id: string;
-  text: string;
-  completed: boolean;
-};
+// type Todo = {
+//   id: string;
+//   text: string;
+//   completed: boolean;
+// };
 
 export default function TodoList() {
   const { user, taskSets, setTaskSets } = useAuth();

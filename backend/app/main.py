@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
 from app.auth import verify_password, create_access_token, get_current_user, hash_password
-import db
+import app.db as db
 
 app = FastAPI()
 
@@ -17,6 +17,7 @@ app.add_middleware(
 )
 
 # Initialize database
+db.init_db_pool()  # Initialize the connection pool
 db.init_db()
 
 # Request and response models ==============================================================================
@@ -54,6 +55,11 @@ class UpdateTaskSetRequest(BaseModel):
     name: str
     shared_with: List[str] = []
     routine: bool
+
+class CreateUserRequest(BaseModel):
+    username: str
+    email: str
+    password: str
 # =========================================================================================
 
 # DUMMY DATA - In-memory storage for testing purposes ===========================
@@ -95,7 +101,6 @@ def health():
 @app.post("/login")
 def login(data: LoginRequest):
     user = db.get_user_by_username(data.username)  # This is just to ensure the user exists in the database, but we still need to verify the password
-    
     if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
@@ -105,7 +110,7 @@ def login(data: LoginRequest):
     ):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    token = create_access_token(user["id"])  # Assuming the user record has an "id" field
+    token = create_access_token(str(user["id"]))  # Assuming the user record has an "id" field
 
     return {
         "access_token": token,
@@ -256,12 +261,13 @@ def get_user_tasks(current_user: str = Depends(get_current_user)):
 
 # User handling endpoints =============================================================================
 # Create a new user
-@app.put("/users")
-def create_user(data: CreateTaskSetRequest):
-    if data.ownerId in USERS:
-        raise HTTPException(status_code=400, detail="User already exists")
-    USERS[data.ownerId] = {"password": hash_password("default"), "id": str(uuid.uuid4())}
-    return {"status": "ok", "username": data.ownerId}
+@app.post("/users")
+def create_user(data: CreateUserRequest):
+    if db.get_user_by_username(data.username):
+        raise HTTPException(status_code=400, detail="Username already exists")
+    
+    db.create_user(data.username, data.email, hash_password(data.password))
+    return {"status": "ok", "username": data.username}
 
 # Get user's dashboard
 @app.get("/users/{username}/dashboard")

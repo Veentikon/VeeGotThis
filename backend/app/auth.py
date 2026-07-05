@@ -1,5 +1,6 @@
 import os
 import jwt
+from jwt import encode, decode
 from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -20,20 +21,19 @@ def verify_password(password: str, hashed: str) -> bool:
     return password_hash.verify(password, hashed)
 
 # token creation
-def create_access_token(username: str):
+def create_access_token(user_id: str):
     expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
     payload = {
-        "sub": username,
+        "sub": user_id,
         "exp": expire,
         "iat": datetime.now(timezone.utc)
     }
 
-    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+    return encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 # token validation
 def get_current_user(token: str = Depends(oauth2_scheme)) -> str:
-    print("Validating token:", token) ## ================================================= test
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username = payload.get("sub")

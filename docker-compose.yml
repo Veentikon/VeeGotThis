@@ -4,9 +4,10 @@ services:
     ports: 
       - "8000:8000"
     depends_on:
-      - fam_db
+      - db
     env_file:
       - .env
+      - .env.db
     volumes:
       - ./backend/app:/app/app
     environment:

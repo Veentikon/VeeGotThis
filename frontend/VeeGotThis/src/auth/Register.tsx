@@ -1,13 +1,23 @@
 import { useState } from 'react';
+import { apiFetch } from '../api/api';
+// import { Email } from '@mui/icons-material';
 
 function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [password1, setPassword1] = useState('');
+    const [email, setEmail] = useState('');
 
-    const handleRegister = () => {
-        console.log("Adding new user:", username)
-    }
+    const handleRegister = async () => {
+        const data = await apiFetch("/users", {
+            method: "POST",
+            body: JSON.stringify({ username: username, email: email, password: password })
+        });
+
+        if (`${data.status}`.startsWith("4")) {
+            throw new Error(data.detail || "Registration failed");
+        }
+    };
 
     return (
         <form className='authForm'>
@@ -19,6 +29,14 @@ function Register() {
                 placeholder="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+                className="credInput"
+                id='inpureg'
+                type="text"
+                placeholder="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
             />
             <input
                 className="credInput"

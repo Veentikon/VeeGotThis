@@ -1,5 +1,6 @@
 # from multiprocessing import pool
 from psycopg2 import pool
+import psycopg2.extras
 import psycopg2
 from dotenv import load_dotenv
 import os
@@ -8,14 +9,29 @@ load_dotenv()
 
 # 1. Initialize the Connection Pool ONCE at startup
 # Do NOT create a global 'conn' object directly for queries
-db_pool = pool.ThreadedConnectionPool(
-    minconn=2,
-    maxconn=10,
-    host="fam_db",
-    database=os.getenv("POSTGRES_DB"),
-    user=os.getenv("POSTGRES_USER"),
-    password=os.getenv("POSTGRES_PASSWORD")
-)
+db_pool = None  # This will hold the connection pool object
+def init_db_pool():
+    global db_pool
+    db_pool = pool.ThreadedConnectionPool(
+        minconn=2,
+        maxconn=10,
+        # host=os.getenv("POSTGRES_HOST", "db"),  # Use the service name defined in docker-compose.yml
+        # database=os.getenv("POSTGRES_DB"),
+        # user=os.getenv("POSTGRES_USER"),
+        # password=os.getenv("POSTGRES_PASSWORD")
+        host="db",
+        database="fam_db",
+        user="veeteck",
+        password="ZaWardo24025",
+    )
+# db_pool = pool.ThreadedConnectionPool(
+#     minconn=2,
+#     maxconn=10,
+#     host="fam_db",
+#     database=os.getenv("POSTGRES_DB"),
+#     user=os.getenv("POSTGRES_USER"),
+#     password=os.getenv("POSTGRES_PASSWORD")
+# )
 
 def init_db():
     conn = db_pool.getconn()
@@ -48,7 +64,8 @@ def init_db():
 
 
 # Add new user
-def insert_user(username, email, password_hash):
+def create_user(username, email, password_hash):
+    print("db creating user ...") # ==========================================================
     # Get connection from the pool
     conn = db_pool.getconn()
     try: 
